@@ -101,11 +101,16 @@ Sidetree defines <code>published</code>, <code>updateCommitment</code>, and <cod
 <li>The server <strong><strong>MUST</strong></strong> include the resolution response object <code>methodMetadata</code> composed of a <code>published</code> property with value <code>false</code>.</li>
 </ul>
 </li>
-<li>If the DID does exist:
+<li>If the DID does exist and has not been deactivated:
 <ul>
 <li>The server <strong><strong>MUST</strong></strong> respond with HTTP Status Code 200.</li>
 <li>The server <strong><strong>MUST</strong></strong> include the <code>didDocument</code> property, with its value set to the latest DID document.</li>
 <li>The server <strong><strong>MUST</strong></strong> include the resolution response object <code>methodMetadata</code> composed of a <code>published</code> property with value <code>true</code>.</li>
+</ul>
+</li>
+<li>If the DID does exist and has been deactivated:
+<ul>
+<li>The server <strong><strong>MUST</strong></strong> respond with HTTP Status Code 410.</li>
 </ul>
 </li>
 <li>Otherwise, for failure, the server <strong><strong>MUST</strong></strong> respond with an appropriate HTTP Status Code (400, 401, 404, 500).</li>
