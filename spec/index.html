@@ -740,7 +740,7 @@
 <li>The object <strong><strong>MUST</strong></strong> include a type property, and its value <strong><strong>SHOULD</strong></strong> be the identifier type string of a registered <a href="https://w3c-ccg.github.io/ld-cryptosuite-registry/">Cryptographic Suite</a> that supports JWK representations - for example:
 <ul>
 <li><code>EcdsaSecp256k1VerificationKey2019</code></li>
-<li><code>JwsVerificationKey2020</code></li>
+<li><code>JsonWebKey2020</code></li>
 </ul>
 </li>
 <li>The object <strong><strong>MUST</strong></strong> include a <code>jwk</code> property, and its value <strong><strong>MUST</strong></strong> be a public key expressed as a <a href="https://tools.ietf.org/html/rfc7517">IETF RFC 7517</a> compliant JWK representation for a <a href="#key-algorithm"><code>KEY_ALGORITHM</code></a> supported by the implementation. If the value is not a compliant JWK representation, the entire <em>Patch Action</em> <strong><strong>MUST</strong></strong> be discarded, without any of it being used to modify the DID’s state.</li>
