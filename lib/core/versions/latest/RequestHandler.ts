@@ -145,7 +145,8 @@ export default class RequestHandler implements IRequestHandler {
    * Handles resolve operation.
    * @param shortOrLongFormDid Can either be:
    *   1. A short-form DID. e.g. 'did:<methodName>:abc' or
-   *   2. A long-form DID. e.g. 'did:<methodName>:<unique-portion>?-<methodName>-initial-state=<encoded-original-did-document>'.
+   *   2. A long-form DID. e.g. 'did:<methodName>:<unique-portion>?-<methodName>-initial-state=<create-operation-suffix-data>.<create-operation-delta>' or
+   *                            'did:<methodName>:<unique-portion>:<create-operation-suffix-data>.<create-operation-delta>'
    */
   public async handleResolveRequest (shortOrLongFormDid: string): Promise<ResponseModel> {
     try {
@@ -201,7 +202,7 @@ export default class RequestHandler implements IRequestHandler {
   /**
    * Resolves the given long-form DID by resolving using operations found over the network first;
    * if no operations found, the given create operation will be used to construct the DID state.
-   * 
+   *
    * @returns [DID state, published]
    */
   private async resolveLongFormDid (did: Did): Promise<[DidState | undefined, boolean]> {

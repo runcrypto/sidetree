@@ -21,8 +21,6 @@ import VersionModel from '../common/models/VersionModel';
  * The class that handles code versioning.
  */
 export default class VersionManager implements IVersionManager, IVersionMetadataFetcher {
-  public allSupportedHashAlgorithms: number[] = [];
-
   // Reverse sorted implementation versions. ie. latest version first.
   private versionsReverseSorted: VersionModel[];
 
@@ -59,7 +57,7 @@ export default class VersionManager implements IVersionManager, IVersionMetadata
     resolver: Resolver,
     transactionStore: ITransactionStore
   ) {
-    // NOTE: In principal each version of the interface implemtnations can have different constructors,
+    // NOTE: In principal each version of the interface implementations can have different constructors,
     // but we currently keep the constructor signature the same as much as possible for simple instance construction,
     // but it is not inherently "bad" if we have to have conditional constructions for each if we have to.
     for (const versionModel of this.versionsReverseSorted) {
@@ -104,10 +102,6 @@ export default class VersionManager implements IVersionManager, IVersionMetadata
       }
       this.versionMetadatas.set(version, versionMetadata);
     }
-
-    // Get and cache supported hash algorithms.
-    const hashAlgorithmsWithDuplicates = Array.from(this.versionMetadatas.values(), value => value.hashAlgorithmInMultihashCode);
-    this.allSupportedHashAlgorithms = Array.from(new Set(hashAlgorithmsWithDuplicates)); // This line removes duplicates.
   }
 
   /**

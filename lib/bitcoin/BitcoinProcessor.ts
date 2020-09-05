@@ -70,7 +70,7 @@ export default class BitcoinProcessor {
   /** Number of seconds between transaction queries */
   public pollPeriod: number;
 
-  /** Days of notice before the wallet is depeleted of all funds */
+  /** Days of notice before the wallet is depleted of all funds */
   public lowBalanceNoticeDays: number;
 
   private versionManager: VersionManager;
@@ -154,7 +154,7 @@ export default class BitcoinProcessor {
         this.lockResolver,
         config.valueTimeLockPollPeriodInSeconds || 10 * 60,
         BitcoinClient.convertBtcToSatoshis(config.valueTimeLockAmountInBitcoins), // Desired lock amount in satoshis
-        BitcoinClient.convertBtcToSatoshis(valueTimeLockTransactionFeesInBtc),    // Txn Fees amoount in satoshis
+        BitcoinClient.convertBtcToSatoshis(valueTimeLockTransactionFeesInBtc),    // Txn Fees amount in satoshis
         ProtocolParameters.maximumValueTimeLockDurationInBlocks);                 // Desired lock duration in blocks
   }
 
@@ -177,19 +177,17 @@ export default class BitcoinProcessor {
 
     const startingBlock = await this.getStartingBlockForPeriodicPoll();
 
-    // Throw if bitcoin client is not synced up to the bitcoin service's known height.
-    // NOTE: Implementation for issue #692 can simplify this method and remove this check.
     if (startingBlock === undefined) {
-      throw new SidetreeError(ErrorCode.BitcoinProcessorBitcoinClientCurrentHeightNotUpToDate);
-    }
-
-    console.debug('Synchronizing blocks for sidetree transactions...');
-    console.info(`Starting block: ${startingBlock.height} (${startingBlock.hash})`);
-    if (this.bitcoinDataDirectory) {
-      // This reads into the raw block files and parse to speed up the initial startup instead of rpc
-      await this.fastProcessTransactions(startingBlock);
+      console.info('Bitcoin processor state is ahead of bitcoind: skipping initialization');
     } else {
-      await this.processTransactions(startingBlock);
+      console.debug('Synchronizing blocks for sidetree transactions...');
+      console.info(`Starting block: ${startingBlock.height} (${startingBlock.hash})`);
+      if (this.bitcoinDataDirectory) {
+        // This reads into the raw block files and parse to speed up the initial startup instead of rpc
+        await this.fastProcessTransactions(startingBlock);
+      } else {
+        await this.processTransactions(startingBlock);
+      }
     }
 
     // NOTE: important to this initialization after we have processed all the blocks
@@ -605,7 +603,9 @@ export default class BitcoinProcessor {
 
       const startingBlock = await this.getStartingBlockForPeriodicPoll();
 
-      if (startingBlock) {
+      if (startingBlock === undefined) {
+        console.info('Bitcoin processor state is ahead of bitcoind: skipping periodic poll');
+      } else {
         await this.processTransactions(startingBlock);
       }
     } catch (error) {
@@ -698,7 +698,7 @@ export default class BitcoinProcessor {
     const exponentiallySpacedBlocks = await this.blockMetadataStore.lookBackExponentially();
     const lastKnownValidBlock = await this.firstValidBlock(exponentiallySpacedBlocks);
 
-    await this.trimDatabasesToBlock(lastKnownValidBlock?.height);
+    await this.trimDatabasesToBlock(lastKnownValidBlock ? lastKnownValidBlock.height : undefined);
 
     return lastKnownValidBlock;
   }
@@ -713,7 +713,7 @@ export default class BitcoinProcessor {
 
     // NOTE: Order is IMPORTANT!
     // *****
-    // Remove block metadata BEFORE we remove any other data, because block metata is used as the timestamp.
+    // Remove block metadata BEFORE we remove any other data, because block metadata is used as the timestamp.
     await this.blockMetadataStore.removeLaterThan(blockHeight);
 
     const lastTransactionNumberOfGivenBlock = blockHeight ? TransactionNumber.lastTransactionOfBlock(blockHeight) : undefined;

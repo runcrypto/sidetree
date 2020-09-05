@@ -2,7 +2,6 @@ export default {
   BitcoinFileReaderBlockCannotReadDirectory: 'bitcoin_file_reader_block_cannot_read_directory',
   BitcoinFileReaderBlockCannotReadFile: 'bitcoin_file_reader_block_cannot_read_file',
   BitcoinWalletIncorrectImportString: 'bitcoin_wallet_incorrect_import_string',
-  BitcoinProcessorBitcoinClientCurrentHeightNotUpToDate: 'bitcion_processor_bitcoin_client_current_height_not_up_to_date',
   BitcoinProcessorCannotProcessBlocksBeforeGenesis: 'bitcoin_processor_cannot_process_blocks_before_genesis',
   BitcoinProcessInvalidPreviousBlockHash: 'bitcoin_processor_invalid_previous_block_hash',
   BitcoinRawDataParserInvalidBlockData: 'bitcoin_raw_data_parser_invalid_block_data',
@@ -17,7 +16,7 @@ export default {
   LockResolverRedeemScriptIsInvalid: 'lock_resolver_redeem_script_is_invalid',
   LockResolverRedeemScriptIsNotLock: 'lock_resolver_redeem_script_is_not_lock',
   LockResolverTransactionIsNotPayingToScript: 'lock_resolver_transaction_is_not_paying_to_script',
-  LockResolverTransactionNotConfirmed: 'lock_resolver_transation_not_confirmed',
+  LockResolverTransactionNotConfirmed: 'lock_resolver_transaction_not_confirmed',
   LockResolverTransactionNotFound: 'lock_resolver_transaction_not_found',
   ValueTimeLockInPendingState: 'value_time_lock_in_pending_state',
   VersionManagerVersionStringNotFound: 'version_manager_version_string_not_found'
